@@ -143,7 +143,9 @@ form {
   display: grid;
   grid-auto-flow: column;
   gap: 10px;
-  justify-content: center;
+  /* THIS IS ADDED */
+  margin-top: -250px;
+  /* justify-content: center; */
   align-items: center;
 }
 
