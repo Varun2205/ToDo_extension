@@ -158,10 +158,6 @@ form {
   cursor: pointer;
 }
 
-.gmail   { background-image: url("https://commons.wikimedia.org/wiki/File:Gmail_icon_(2020).svg"); }
-
-
-
 /* Scrollbar base */
 ::-webkit-scrollbar {
   width: 10px;

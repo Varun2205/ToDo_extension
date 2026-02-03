@@ -57,4 +57,65 @@ input.addEventListener("keydown", e => {
   }
 });
 
+const shortcuts = [
+  "gmail",
+  "netflix",
+  "primevideo",
+  "himanime",
+  "amazon",
+  "udemy",
+  "flixhq",
+];
+
+
+const shortcutIcons = {
+  gmail: "mail",
+  netflix: "movie",
+  primevideo: "ondemand_video",
+  himanime: "play_circle",
+  amazon: "shopping_cart",
+  udemy: "school",
+  flixhq: "theaters",
+};
+
+const shortcutLinks = {
+  gmail: "https://mail.google.com",
+  netflix: "https://www.netflix.com",
+  primevideo: "https://www.primevideo.com",
+  himanime: "https://hianime.sx",
+  amazon: "https://www.amazon.in",
+  udemy: "https://www.udemy.com",
+  flixhq: "https://flixhq.tube/"
+};
+
+
+function makeSt() {
+  const stCont = document.getElementsByClassName("shortcuts")[0];
+
+  shortcuts.forEach((st) => {
+    const mainEle = document.createElement("div");
+    mainEle.className = `shortcut ${st}`;
+
+    const icon = document.createElement("span");
+    icon.className = "material-symbols-outlined";
+    icon.textContent = shortcutIcons[st];
+
+    mainEle.addEventListener("click", () => {
+      window.location.href = shortcutLinks[st];
+    });
+
+    mainEle.appendChild(icon);
+    stCont.appendChild(mainEle);
+  });
+mainEle.onclick = () => {
+  window.open(shortcutLinks[st], "_blank");
+};
+}
+
+
+
+
+
+
 loadTasks();
+makeSt();
