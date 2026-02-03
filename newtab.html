@@ -1,27 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Notes</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<form class="search-bar" action="https://www.google.com/search" method="GET">
-  <input
-    type="text"
-    name="q"
-    placeholder="Search Google"
-    autocomplete="off"
-  />
-</form>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-  <div class="todo-app">
-    <h1>TO DO</h1>
-    <input id="taskInput" type="text" placeholder="New note" />
-    <ul id="taskList"></ul>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+  <body>
+    <div id="containerL">
+      <div class="imgCont">
+        <img src="" alt="#">
+      </div>
+      <form
+        class="search-bar"
+        action="https://www.google.com/search"
+        method="GET"
+      >
+        <input
+          type="text"
+          name="q"
+          placeholder="Search Google"
+          autocomplete="off"
+        />
+      </form>
+    </div>
+    <div id="containerR">
+      <div class="todo-app">
+        <h1>TO DO</h1>
+        <input id="taskInput" type="text" placeholder="New note" />
+        <ul id="taskList"></ul>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
