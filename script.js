@@ -16,7 +16,14 @@ function saveTasks() {
 
 function loadTasks() {
   const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-  tasks.forEach(task => addTask(task.text, task.done));
+  // Filter out completed tasks - only load incomplete ones
+  const incompleteTasks = tasks.filter(task => !task.done);
+  
+  // Clear existing list (in case there are any)
+  list.innerHTML = '';
+  
+  // Only add incomplete tasks
+  incompleteTasks.forEach(task => addTask(task.text, false));
 }
 
 function addTask(text, done = false) {
