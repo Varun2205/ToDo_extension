@@ -1,22 +1,26 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notes</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-  <body>
-    <div id="containerL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Tab</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- LEFT COLUMN -->
+    <section class="left">
       <div class="imgCont">
-        <img src="" alt="#">
+        <img src="" alt="">
       </div>
-      <form
-        class="search-bar"
+
+      <form class="search-bar"
         action="https://www.google.com/search"
-        method="GET"
-      >
+        method="GET">
         <input
           type="text"
           name="q"
@@ -24,24 +28,21 @@
           autocomplete="off"
         />
       </form>
+
       <div class="shortcuts"></div>
-      <!-- <div class="shortcuts">
-        <div class="shortcut gmail"></div>
-        <div class="shortcut netflix"></div>
-        <div class="shortcut primevideo"></div>
-        <div class="shortcut himanime"></div>
-        <div class="shortcut amazon"></div>
-        <div class="shortcut udemy"></div>
-        <div class="shortcut flixhq"></div>
-      </div> -->
-    </div>
-    <div id="containerR">
+    </section>
+
+    <!-- RIGHT COLUMN -->
+    <section class="right">
       <div class="todo-app">
         <h1>TO DO</h1>
         <input id="taskInput" type="text" placeholder="New note" />
         <ul id="taskList"></ul>
       </div>
-    </div>
-    <script src="script.js"></script>
-  </body>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
