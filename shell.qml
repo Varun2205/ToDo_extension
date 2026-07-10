@@ -1,24 +1,36 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell // Capital 'Q' fixes the error
+import Quickshell
+import Quickshell.Wayland
 
-FloatingWindow {
+PanelWindow {
     id: root
-    title: "QuickNotes"
+
+    WlrLayershell.layer: WlrLayer.Bottom 
     
-    // Window Setup
-    width: 350
-    height: 500
-    visible: true
+    //Allow keyboard focus so you can click and type into the todo list
+    focusable: true
+    anchors {
+        top: true
+        right: true
+    }
     
-    // Makes the window background transparent
+
+    margins {
+        top: 100 
+        right: 100  
+    }
+    
+    // Widget Dimensions
+    implicitWidth: 350
+    implicitHeight: 500
     color: "transparent"
     
     // Main background styling (60% opacity)
     Rectangle {
         anchors.fill: parent
-        color: "#1E1E1E" // Dark mode base
+        color: "#1E1E1E" 
         opacity: 0.60
         radius: 12
         border.color: "#333333"
@@ -31,7 +43,6 @@ FloatingWindow {
         anchors.margins: 15
         spacing: 10
 
-        // Header
         Text {
             text: "Reminders"
             font.pixelSize: 22
@@ -40,7 +51,6 @@ FloatingWindow {
             Layout.alignment: Qt.AlignLeft
         }
 
-        // List View for Todo Items
         ListView {
             id: todoListView
             Layout.fillWidth: true
@@ -57,16 +67,15 @@ FloatingWindow {
                 width: todoListView.width
                 spacing: 10
 
-                // 1. Circular checkbox
+                // Circular checkbox
                 Rectangle {
                     width: 20
                     height: 20
-                    radius: 10 // Perfect circle
+                    radius: 10
                     color: "transparent"
-                    border.color: model.text === "" ? "#555555" : "#0A84FF" // Apple blue Accent
+                    border.color: model.text === "" ? "#555555" : "#0A84FF"
                     border.width: 2
                     
-                    // Inside fill for hover/visual feedback
                     Rectangle {
                         anchors.fill: parent
                         anchors.margins: 4
@@ -88,28 +97,26 @@ FloatingWindow {
                     }
                 }
 
-                // 2. Text Input Area
+                // Text Input Area
                 TextArea {
                     id: textInput
                     Layout.fillWidth: true
                     text: model.text
                     font.pixelSize: 15
                     color: "#FFFFFF"
-                    background: null // Borderless like Apple Notes
+                    background: null
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
                     
                     onTextChanged: model.text = text
 
-                    // Feature: Press Enter to create a new todo item below
                     Keys.onPressed: (event) => {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            event.accepted = true; // Stop newline inside the current item
+                            event.accepted = true;
                             
                             var nextIndex = index + 1;
                             todoModel.insert(nextIndex, {"text": ""});
                             
-                            // Small delay to let the item render, then focus it
                             Timer.singleShot(10, function() {
                                 todoListView.positionViewAtIndex(nextIndex, ListView.Contain);
                                 var nextItem = todoListView.contentItem.children[nextIndex];
