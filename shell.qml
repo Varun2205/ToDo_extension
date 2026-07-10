@@ -22,12 +22,12 @@ PanelWindow {
         right: 100  
     }
     
-    // Widget Dimensions
+    
     implicitWidth: 350
     implicitHeight: 500
     color: "transparent"
     
-    // Main background styling (60% opacity)
+   //Backgroun 
     Rectangle {
         anchors.fill: parent
         color: "#1E1E1E" 
@@ -97,7 +97,7 @@ PanelWindow {
                     }
                 }
 
-                // Text Input Area
+              
                 TextArea {
                     id: textInput
                     Layout.fillWidth: true
