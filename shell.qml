@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt.labs.settings
 import Quickshell
 import Quickshell.Wayland
 
@@ -9,25 +10,61 @@ PanelWindow {
 
     WlrLayershell.layer: WlrLayer.Bottom 
     
-    //Allow keyboard focus so you can click and type into the todo list
     focusable: true
     anchors {
         top: true
         right: true
     }
-    
-
     margins {
         top: 100 
         right: 100  
     }
-    
-    
     implicitWidth: 350
     implicitHeight: 500
     color: "transparent"
-    
-   //Backgroun 
+
+    property bool isLoading: false
+    property int focusIndex: -1
+
+    // Persistence handler
+    Settings {
+        id: settings
+        property string savedTodos: "[]"
+    }
+
+    function saveReminders() {
+        if (isLoading) return
+        var items = []
+        for (var i = 0; i < todoModel.count; i++) {
+            var txt = todoModel.get(i).text
+            if (txt.trim() !== "") {
+                items.push({ "text": txt })
+            }
+        }
+        settings.savedTodos = JSON.stringify(items)
+    }
+
+    function loadReminders() {
+        isLoading = true
+        todoModel.clear()
+        try {
+            var items = JSON.parse(settings.savedTodos)
+            for (var i = 0; i < items.length; i++) {
+                todoModel.append(items[i])
+            }
+        } catch (e) {
+            console.log("Error loading saved todos:", e)
+        }
+        
+        if (todoModel.count === 0) {
+            todoModel.append({ "text": "" })
+        }
+        isLoading = false
+    }
+
+    Component.onCompleted: loadReminders()
+
+    // Background 
     Rectangle {
         anchors.fill: parent
         color: "#1E1E1E" 
@@ -44,7 +81,7 @@ PanelWindow {
         spacing: 10
 
         Text {
-            text: "Reminders"
+            text: "TO DO STUFF ..."
             font.pixelSize: 22
             font.bold: true
             color: "#FFFFFF"
@@ -60,12 +97,14 @@ PanelWindow {
 
             model: ListModel {
                 id: todoModel
-                ListElement { text: "Click here to start typing..." }
             }
 
             delegate: RowLayout {
+                id: delegateRow
                 width: todoListView.width
                 spacing: 10
+
+                property alias textInputItem: textInput
 
                 // Circular checkbox
                 Rectangle {
@@ -73,14 +112,14 @@ PanelWindow {
                     height: 20
                     radius: 10
                     color: "transparent"
-                    border.color: model.text === "" ? "#555555" : "#0A84FF"
+                    border.color: model.text === "" ? "#555555" : "#98971a"
                     border.width: 2
                     
                     Rectangle {
                         anchors.fill: parent
                         anchors.margins: 4
                         radius: 6
-                        color: "#0A84FF"
+                        color: '#98971a'
                         visible: mouseArea.containsMouse
                     }
 
@@ -93,11 +132,11 @@ PanelWindow {
                             if (todoModel.count === 0) {
                                 todoModel.append({"text": ""})
                             }
+                            root.saveReminders()
                         }
                     }
                 }
 
-              
                 TextArea {
                     id: textInput
                     Layout.fillWidth: true
@@ -108,28 +147,36 @@ PanelWindow {
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
                     
-                    onTextChanged: model.text = text
+                    onTextChanged: {
+                        if (model.text !== text) {
+                            model.text = text
+                            root.saveReminders()
+                        }
+                    }
 
                     Keys.onPressed: (event) => {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                             event.accepted = true;
                             
                             var nextIndex = index + 1;
+                            root.focusIndex = nextIndex;
                             todoModel.insert(nextIndex, {"text": ""});
+                            root.saveReminders();
                             
-                            Timer.singleShot(10, function() {
+                            Qt.callLater(function() {
                                 todoListView.positionViewAtIndex(nextIndex, ListView.Contain);
-                                var nextItem = todoListView.contentItem.children[nextIndex];
-                                if (nextItem) {
-                                    nextItem.children[1].forceActiveFocus();
+                                var nextItem = todoListView.itemAtIndex(nextIndex);
+                                if (nextItem && nextItem.textInputItem) {
+                                    nextItem.textInputItem.forceActiveFocus();
                                 }
                             });
                         }
                     }
                     
                     Component.onCompleted: {
-                        if (index === todoModel.count - 1 && text === "") {
+                        if (root.focusIndex === index || (index === todoModel.count - 1 && text === "" && todoModel.count === 1)) {
                             forceActiveFocus();
+                            root.focusIndex = -1;
                         }
                     }
                 }
